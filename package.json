@@ -1,0 +1,41 @@
+{
+  "name": "@jdw/blabbermouth",
+  "version": "0.0.1",
+  "description": "Lightweight and extensible pub-sub a la Typescript.",
+  "engineStrict": true,
+  "engines": {
+    "node": ">= 4.3.2"
+  },
+  "author": "Jason Wijegooneratne <admin@jwije.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jdwije/blabbermouth.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jdwije/blabbermouth/issues"
+  },
+  "homepage": "https://github.com/jdwije/blabbermouth#readme",
+  "dependencies": {
+    "tslib": "~1.7.1"
+  },
+  "devDependencies": {
+    "@types/jest": "~20.0.2",
+    "@types/node": "~6.0.78",
+    "jest": "~20.0.0",
+    "tslint": "~5.4.3",
+    "tslint-microsoft-contrib": "~5.0.0",
+    "tsutils": "~2.4.0",
+    "typescript": "~2.4.1"
+  },
+  "scripts": {
+    "clean": "rm -rf coverage build tmp",
+    "build": "npm run clean && tsc -p tsconfig.release.json",
+    "watch": "tsc -w -p tsconfig.release.json",
+    "lint": "tslint -t stylish --type-check --project 'tsconfig.json'",
+    "pretest": "npm run lint",
+    "test": "npm run test-only",
+    "test-only": "jest --coverage",
+    "test:watch": "jest --watch"
+  }
+}
