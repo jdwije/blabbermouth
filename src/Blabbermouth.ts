@@ -30,6 +30,6 @@ export default class Blabbermouth implements Blabbermouth.Subject {
         return this
             .subscribers
             .filter(sub => sub.events.filter(e => e === id).length > 0)
-            .map(async sub => await sub.action(id, event));
+            .map(async sub => await sub.notify(id, event));
     }
 };

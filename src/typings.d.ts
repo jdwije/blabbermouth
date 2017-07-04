@@ -10,7 +10,7 @@ declare module Blabbermouth {
 
     export type Subscriber = {
         events: Array<string>,
-        action: (id: string, event: Event) => Promise<any>
+        notify: (id: string, event: Event) => Promise<any>
     };
 
     export interface Subject {
