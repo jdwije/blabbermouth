@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
@@ -17,7 +17,11 @@
     "noImplicitAny": false,
     "noImplicitThis": false,
     "strictNullChecks": false,
-    "declaration": true
+    "declaration": true,
+    "lib": [
+      "es2015",
+      "dom"
+    ]
   },
   "include": [
     "src/**/*",

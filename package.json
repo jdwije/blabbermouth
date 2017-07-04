@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/jest": "~20.0.2",
     "@types/node": "~6.0.78",
+    "chai": "^4.0.2",
     "jest": "~20.0.0",
     "tslint": "~5.4.3",
     "tslint-microsoft-contrib": "~5.0.0",
@@ -33,9 +34,7 @@
     "build": "npm run clean && tsc -p tsconfig.release.json",
     "watch": "tsc -w -p tsconfig.release.json",
     "lint": "tslint -t stylish --type-check --project 'tsconfig.json'",
-    "pretest": "npm run lint",
-    "test": "npm run test-only",
-    "test-only": "jest --coverage",
+    "test": "jest --coverage",
     "test:watch": "jest --watch"
   }
 }
