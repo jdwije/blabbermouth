@@ -22,52 +22,53 @@
  *
  */
 declare module Blabbermouth {
-  /**
-   * A topic is an abstract subject matter of interest. This concept is used to pair a 
-   * relavant event with subscribers interested in the topic.
-   */
-  export type Topic = {
-    description?: string;
-    id: string;             // a unique key to identify this topic with
-  }
+    /**
+     * A topic is an abstract subject matter of interest. This concept is used to
+     * pair a relavant event with subscribers interested in the topic.
+     */
+    export type Topic = {
+        description?: string;
+        id: string;             // a unique key to identify this topic with
+    }
 
-  /**
-   * An event is a user triggered occurence. It is uniquely identifiable, time sensitive,
-   * and has content.
-   */
-  export type Event = {
-    content: Object; // a json object
-    createdAt: Date;
-    uuid: string;
-  }
+    /**
+     * An event is a user triggered occurence. It is uniquely identifiable, time
+     * sensitive, and has content.
+     */
+    export type Event = {
+        content: Object; // a json object
+        createdAt: Date;
+        uuid: string;
+    }
 
-  /**
-   * This signature describes an emitter function. It matches content with topics and
-   * publishes them via a distributor.
-   */
-  export type Publisher =
-    (topicId: string, content: Object, dist: IDistributor) => Promise<Object>;
+    /**
+     * This signature describes an emitter function. It matches content with
+     * topics and publishes them via a distributor.
+     */
+    export type Publisher =
+        (topicId: string, content: Object, dist: IDistributor) => Promise<Object>;
 
-  /**
-   * This interface describes a subscriber object. It expects to recieve notifications 
-   * about topics it is interested in.
-   */
-  export interface ISubscriber {
-    kill: () => Promise<Object>;
-    listTopics: () => Topic[];
-    notify: (topicId: string, event: Event) => Promise<Object>;
-  }
+    /**
+     * This interface describes a subscriber object. It expects to recieve
+     * notifications about topics it is interested in.
+     */
+    export interface ISubscriber {
+        kill: () => Promise<Object>;
+        listTopics: () => Topic[];
+        notify: (topicId: string, event: Event) => Promise<Object>;
+    }
 
-  /**
-   * This interface describes a distributor object. It is expected to maintain a list
-   * of topics and their subscribers. It handles distributing events to relevant subscribers.
-   */
-  export interface IDistributor {
-    createTopic: (topic: Topic) => IDistributor;
-    deleteTopic: (topic: Topic) => IDistributor;
-    distribute: (event: Event, topicId: string) => Promise<Object>;
-    getTopic: (topicId: string) => Topic;
-    listTopics: () => Topic[];
-    register: (subscriber: ISubscriber) => IDistributor;
-  }
+    /**
+     * This interface describes a distributor object. It is expected to maintain
+     * a list of topics and their subscribers. It handles distributing events to
+     * relevant subscribers.
+     */
+    export interface IDistributor {
+        createTopic: (topic: Topic) => IDistributor;
+        deleteTopic: (topic: Topic) => IDistributor;
+        distribute: (event: Event, topicId: string) => Promise<Object>;
+        getTopic: (topicId: string) => Topic;
+        listTopics: () => Topic[];
+        register: (subscriber: ISubscriber) => IDistributor;
+    }
 }

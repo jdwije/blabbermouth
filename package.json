@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/jdwije/blabbermouth#readme",
   "dependencies": {
-    "tslib": "~1.7.1"
+    "tslib": "~1.7.1",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "@types/jest": "~20.0.2",
