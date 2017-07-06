@@ -1,24 +1,25 @@
 /**
- * Blabbermouth is a publish-subscriber (pub-sub) pattern implementation for nodeJS and
- * the browser.
+ * Blabbermouth is a publish-subscriber (pub-sub) pattern implementation for
+ * nodeJS and the browser.
  *
  * # Ambitions
  *
- * It is envisaged that blabbermouth be a simple and effective tool for passing notifications
- * asynchronously to a number of services for further processing and then later being able to
- * collate their responses. Blabbermouth will focus on in-memory applications of the pub-sub
- * pattern however its interfaces should be designed to allow breaking it up at a later stage 
- * into distributed processes.
+ * It is envisaged that blabbermouth be a simple and effective tool for passing
+ * notifications asynchronously to a number of services for further processing
+ * and then later being able to collate their responses. Blabbermouth will focus
+ * on in-memory applications of the pub-sub pattern however its interfaces
+ * should be designed to allow breaking it up at a later stage into distributed
+ * processes.
  *
- * - Simplicity: It should be dead simple to use . The only features we are interested in
- *   are the goals in this list plus message passing.
+ * - Simplicity: It should be dead simple to use . The only features we are
+ *   interested in are the goals in this list plus message passing.
  *
- * - Extensible: It should be straight-forward to extend this software in meaningful ways,
- *   add inovative features whilst reusing working code, and to be able to do this outside
- *   of the core package.
+ * - Extensible: It should be straight-forward to extend this software in
+ *   meaningful ways, add inovative features whilst reusing working code, and to
+ *   be able to do this outside of the core package.
  *
- * - Performance: It should strive to use best in class algorithms and techniques to achive
- *   its ends.
+ * - Performance: It should strive to use best in class algorithms and
+ *   techniques to achive its ends.
  *
  */
 declare module Blabbermouth {
