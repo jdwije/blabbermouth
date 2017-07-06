@@ -66,7 +66,7 @@ declare module Blabbermouth {
      */
     export interface IDistributor {
         createTopic: (topic: Topic) => IDistributor;
-        deleteTopic: (topic: Topic) => IDistributor;
+        deleteTopic: (topicId: string) => IDistributor;
         distribute: (event: Event, topicId: string) => Promise<Object>;
         getTopic: (topicId: string) => Topic;
         listTopics: () => Topic[];
