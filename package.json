@@ -1,7 +1,7 @@
 {
   "name": "@jdw/blabbermouth",
   "version": "0.0.1",
-  "description": "Lightweight and extensible pub-sub a la Typescript.",
+  "description": "Lightweight, asynchronous message passing for NodeJS.",
   "engineStrict": true,
   "engines": {
     "node": ">= 4.3.2"
@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/jdwije/blabbermouth/issues"
   },
-  "homepage": "https://github.com/jdwije/blabbermouth#readme",
+  "homepage": "https://github.com/jdwije/blabbermouth#README.md",
   "dependencies": {
     "tslib": "~1.7.1",
     "uuid": "^3.1.0"
