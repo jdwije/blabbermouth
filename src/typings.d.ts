@@ -3,7 +3,7 @@
  * to be simple, extensible, and performant. It provides out of the box support
  * for publish-subscribe and request-response style messaging patterns. With a
  * bit of extra work it can also be adapted to RPC (remote procedure call)
- * style architectures.
+ * request-response style architectures.
  *
  * # Ambitions
  *
