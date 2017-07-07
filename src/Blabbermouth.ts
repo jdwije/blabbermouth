@@ -7,20 +7,46 @@ import { Distributor, emit } from './index';
  */
 class Blabbermouth {
     private distributor;
-    private RequestResponse;
+    private emit;
 
     constructor(distributor: Blabbermouth.IDistributor = new Distributor(),
         publish: Blabbermouth.RequestResponse = emit) {
         this.distributor = distributor;
-        this.RequestResponse = publish;
+        this.emit = publish;
     }
 
-    publish() {
-        return this.RequestResponse.apply(this, arguments);
+    async publish(topicId, content) {
+        this.emit(topicId, content, this.distributor);
     }
 
-    collect() {
+    async collect(topicId, content) {
+        return this.emit(topicId, content, this.distributor);
+    }
 
+    createTopic(topic: Blabbermouth.Topic) {
+        this.distributor.create(topic)
+
+        return this;
+    }
+
+    deleteTopic(topicId: string) {
+        this.distributor.delete(topicId);
+
+        return this;
+    }
+
+    listTopics() {
+        return this.distributor.list();
+    }
+
+    getTopic(topicId: string) {
+        return this.distributor.get(topicId);
+    }
+
+    registerHandler(topicId: string, handler: Blabbermouth.Subscriber) {
+        this.distributor.register(topicId, handler);
+
+        return this;
     }
 };
 

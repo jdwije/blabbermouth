@@ -93,7 +93,7 @@ declare module Blabbermouth {
      * together all of this functionality into a cohesive piece of software.
      */
     export interface IBlabber {
-        publish: PublishSubscribe;
-        collect: RequestResponse;
+        publish: (topicId: string, content: Object) => IBlabber,
+        collect: (topicId: string, content: Object) => Promise<Object[]>;
     }
 }
