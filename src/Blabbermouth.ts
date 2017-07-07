@@ -3,7 +3,7 @@ import { Distributor, emit } from './index';
 /**
  * Blabbermouth is the public interface of this library. Whilst all its pieces
  * are designed to be de-coupled and re-usable, this class ties together all of
- * thse into a opinionated and productive interface.
+ * these into a cohesive and productive interface.
  */
 class Blabbermouth {
     private distributor;
@@ -43,9 +43,8 @@ class Blabbermouth {
         return this.distributor.get(topicId);
     }
 
-    registerHandler(topicId: string, handler: Blabbermouth.Subscriber) {
-        this.distributor.register(topicId, handler);
-
+    registerHandler(topicIds: string[], handler: Blabbermouth.Subscriber) {
+        this.distributor.register(topicIds, handler);
         return this;
     }
 };
