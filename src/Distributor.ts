@@ -4,7 +4,7 @@
 export default class Distributor implements Blabbermouth.IDistributor {
     private topics = {};
 
-    createTopic(topic) {
+    create(topic) {
         if (this.topics.hasOwnProperty(topic.id))
             throw Error(`Duplicate topic with id: ${topic}`);
 
@@ -16,7 +16,7 @@ export default class Distributor implements Blabbermouth.IDistributor {
         return this;
     }
 
-    deleteTopic(topicId) {
+    delete(topicId) {
         if (this.topics.hasOwnProperty(topicId)) {
             this.topics[topicId].subscribers.forEach(sub => sub.kill());
 
@@ -25,12 +25,12 @@ export default class Distributor implements Blabbermouth.IDistributor {
         return this;
     }
 
-    getTopic(topicId) {
+    get(topicId) {
         if (!this.topics.hasOwnProperty(topicId)) return undefined;
         else return this.topics[topicId].topic;
     }
 
-    listTopics() {
+    list() {
         const list = [];
 
         for (const topic in this.topics) {
@@ -42,24 +42,26 @@ export default class Distributor implements Blabbermouth.IDistributor {
         return list;
     }
 
-    register(subscriber) {
-        subscriber.listTopics().forEach((t) => {
-            if (!this.getTopic(t.id)) this.createTopic(t);
+    register(topicIds, subscriber) {
+        topicIds.forEach((t) => {
+            if (!this.get(t))
+                throw new Error(
+                    `Tried registering handler with non-existant topic id: ${t}`);
 
-            this.topics[t.id].subscribers.push(subscriber);
+            this.topics[t].subscribers.push(subscriber);
         });
 
         return this;
     }
 
-    async distribute(event, topicId) {
-        if (!this.getTopic(topicId)) {
+    async distribute(topicId, event) {
+        if (!this.get(topicId)) {
             throw new Error(`Non-existant topic with id: ${topicId}`);
         }
 
         return Promise.all(
             this.topics[topicId]
                 .subscribers
-                .map(async s => await s.notify(topicId, event)));
+                .map(async s => await s(topicId, event)));
     }
 };

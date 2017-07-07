@@ -1,31 +1,32 @@
 /**
- * Blabbermouth is a publish-subscriber (pub-sub) pattern implementation for
- * nodeJS and the browser.
+ * Blabbermouth is an asynchronous messaging library for NodeJS. It is designed
+ * to be simple, extensible, and performant. It provides out of the box support
+ * for publish-subscribe and request-response style messaging patterns. With a
+ * bit of extra work it can also be adapted to RPC (remote procedure call)
+ * style architectures.
  *
  * # Ambitions
  *
  * It is envisaged that blabbermouth be a simple and effective tool for passing
- * notifications asynchronously to a number of services for further processing
- * and then later being able to collate their responses. Blabbermouth will focus
- * on in-memory applications of the pub-sub pattern however its interfaces
- * should be designed to allow breaking it up at a later stage into distributed
- * processes.
+ * notifications asynchronously to a number of services for further
+ * processing. Blabbermouth will initially focus on in-memory applications of
+ * the pub-sub and req-res patterns however its interfaces should be designed to
+ * allow breaking it up at a later stage into distributed processes.
  *
  * - Simplicity: It should be dead simple to use . The only features we are
- *   interested in are the goals in this list plus message passing.
+ *   interested in are the goals in this list + message passing.
  *
  * - Extensible: It should be straight-forward to extend this software in
- *   meaningful ways, add inovative features whilst reusing working code, and to
- *   be able to do this outside of the core package.
+ *   meaningful ways, add innovative features whilst reusing working code, and
+ *   to be able to do this outside of the core package.
  *
  * - Performance: It should strive to use best in class algorithms and
- *   techniques to achive its ends.
- *
+ *   techniques to achieve its ends.
  */
 declare module Blabbermouth {
     /**
-     * A topic is an abstract subject matter of interest. This concept is used to
-     * pair a relavant event with subscribers interested in the topic.
+     * A topic is an abstract subject matter of interest. This concept is used
+     * to pair a relevant event with subscribers interested in the topic.
      */
     export type Topic = {
         description?: string;
@@ -33,8 +34,8 @@ declare module Blabbermouth {
     }
 
     /**
-     * An event is a user triggered occurence. It is uniquely identifiable, time
-     * sensitive, and has content.
+     * An event is a user triggered occurrence. It is uniquely identifiable,
+     * time sensitive, and has content.
      */
     export type Event = {
         content: Object; // a json object
@@ -43,33 +44,56 @@ declare module Blabbermouth {
     }
 
     /**
-     * This signature describes an emitter function. It matches content with
-     * topics and publishes them via a distributor.
+     * This signature describes a request-response style messaging function. It
+     * pushes content via a distributor out to the relevant handlers, and
+     * collect their results. This is a request-response style messaging
+     * pattern, useful for connecting a client to a set of services.
      */
-    export type Publisher =
+    export type RequestResponse =
         (topicId: string, content: Object, dist: IDistributor) => Promise<Object>;
 
     /**
-     * This interface describes a subscriber object. It expects to recieve
+     * This signature describes a pusher function. It pushes content via a
+     * distributor out to the relevant handlers, and DOES NOT collect their
+     * results. This is a pub-sub messaging pattern, useful for data
+     * distribution to many services.
+     */
+    export type PublishSubscribe =
+        (topicId: string, content: Object, dist: IDistributor) => void;
+
+    /**
+     * This signature describes a subscriber function. It expects to receive
      * notifications about topics it is interested in.
      */
-    export interface ISubscriber {
-        kill: () => Promise<Object>;
-        listTopics: () => Topic[];
-        notify: (topicId: string, event: Event) => Promise<Object>;
+    export type Subscriber = (topicId: string, event: Event) => Promise<Object>;
+
+    /**
+     * This interface describes a topic manager object. It is expected to
+     * maintain a list of topics and their subscribers.
+     */
+    export interface ITopicManager {
+        create: (topic: Topic) => ITopicManager;
+        delete: (topicId: string) => ITopicManager;
+        get: (topicId: string) => Topic;
+        list: () => Topic[];
     }
 
     /**
-     * This interface describes a distributor object. It is expected to maintain
-     * a list of topics and their subscribers. It handles distributing events to
-     * relevant subscribers.
+     * It handles distributing events to relevant subscribers. It maintains a
+     * list of topics and the services interested in them.
      */
-    export interface IDistributor {
-        createTopic: (topic: Topic) => IDistributor;
-        deleteTopic: (topicId: string) => IDistributor;
-        distribute: (event: Event, topicId: string) => Promise<Object>;
-        getTopic: (topicId: string) => Topic;
-        listTopics: () => Topic[];
-        register: (subscriber: ISubscriber) => IDistributor;
+    export interface IDistributor extends ITopicManager {
+        distribute: (topicId: string, event: Event) => Promise<Object[]>;
+        register: (topicsIds: string[], subscriber: Subscriber) => IDistributor;
+    }
+
+    /**
+     * This interface describes the blabbermouth packages' public API. Using all
+     * other types and interfaces defined within the library, this object ties
+     * together all of this functionality into a cohesive piece of software.
+     */
+    export interface IBlabber {
+        publish: PublishSubscribe;
+        collect: RequestResponse;
     }
 }

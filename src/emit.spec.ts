@@ -3,13 +3,13 @@ import { expect } from 'chai';
 
 describe('@jdw/blabbermouth/emit', () => {
     const mockDist: Blabbermouth.IDistributor = {
-        createTopic: (topic) => topic && mockDist,
-        deleteTopic: (topic) => topic && mockDist,
-        distribute: (event, topicId) => new Promise((r) => r({ event, topicId })),
-        getTopic: (topicId) => {
+        create: (topic) => topic && mockDist,
+        delete: (topic) => topic && mockDist,
+        distribute: (topicId, event) => new Promise((r) => r({ event, topicId })),
+        get: (topicId) => {
             return { id: topicId, description: 'foo' };
         },
-        listTopics: () => [],
+        list: () => [],
         register: (subscriber) => subscriber && mockDist,
     };
 

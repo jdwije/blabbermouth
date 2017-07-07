@@ -31,7 +31,7 @@
     "typescript": "~2.4.1"
   },
   "scripts": {
-    "clean": "rm -rf coverage build tmp",
+    "clean": "rm -rf coverage dist tmp",
     "build": "npm run clean && tsc -p tsconfig.release.json",
     "watch": "tsc -w -p tsconfig.release.json",
     "lint": "tslint -t stylish --type-check --project 'tsconfig.json'",
