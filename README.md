@@ -35,3 +35,6 @@ bm.createTopic({
 The above example will produce the following message "Asynchronous messaging in
 action!" on your command line.
 
+
+## Contributing
+

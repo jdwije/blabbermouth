@@ -23,8 +23,11 @@
   "devDependencies": {
     "@types/jest": "~20.0.2",
     "@types/node": "~6.0.78",
+    "benchmark": "^2.1.4",
     "chai": "^4.0.2",
+    "chalk": "^2.0.1",
     "jest": "~20.0.0",
+    "ts-node": "^3.2.0",
     "tslint": "~5.4.3",
     "tslint-microsoft-contrib": "~5.0.0",
     "tsutils": "~2.4.0",
@@ -35,7 +38,11 @@
     "build": "npm run clean && tsc -p tsconfig.release.json",
     "watch": "tsc -w -p tsconfig.release.json",
     "lint": "tslint -t stylish --type-check --project 'tsconfig.json'",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test": "npm run test:unit",
+    "test:coverage": "jest --coverage unit",
+    "test:boundry": "jest --verbose boundry",
+    "test:unit": "jest --verbose unit",
+    "test:watch": "jest --watch --verbose unit",
+    "benchmark": "npm run clean && mkdir tmp && ts-node -c tsconfig.json benchmark/index.benchmark.ts"
   }
 }

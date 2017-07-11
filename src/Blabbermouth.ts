@@ -1,52 +1,71 @@
-import { Distributor, emit } from './index';
+import { Distributor, eventFactory } from './index';
 
 /**
  * Blabbermouth is the public interface of this library. Whilst all its pieces
  * are designed to be de-coupled and re-usable, this class ties together all of
  * these into a cohesive and productive interface.
  */
-class Blabbermouth {
-    private distributor;
-    private emit;
+class Blabbermouth implements Blabbermouth.IBlabber {
+  private distributor;
 
-    constructor(distributor: Blabbermouth.IDistributor = new Distributor(),
-        publish: Blabbermouth.RequestResponse = emit) {
-        this.distributor = distributor;
-        this.emit = publish;
+  constructor(distributor: Blabbermouth.IDistributor = new Distributor()) {
+    this.distributor = distributor;
+  }
+
+  publish(topicId, data, subscriber?) {
+    const topicIds = Array.isArray(topicId) ? topicId : [topicId];
+
+    topicIds.map((id) => {
+      const event = eventFactory(id, data);
+      this.distributor.publish(id, event, subscriber);
+    });
+
+    return this;
+  }
+
+  async request(topicId, data, subscriber?) {
+    const topicIds = Array.isArray(topicId) ? topicId : [topicId];
+    let i = 0;
+    let response = [];
+
+    while (i < topicIds.length) {
+      const event = eventFactory(topicIds[i], data);
+      response = response.concat(
+        await this.distributor.request(topicIds[i], event, subscriber));
+      i++;
     }
 
-    async publish(topicId, content) {
-        this.emit(topicId, content, this.distributor);
-    }
+    return response;
+  }
 
-    async collect(topicId, content) {
-        return this.emit(topicId, content, this.distributor);
-    }
+  createTopic(topic: Blabbermouth.Topic) {
+    this.distributor.createTopic(topic)
 
-    createTopic(topic: Blabbermouth.Topic) {
-        this.distributor.create(topic)
+    return this;
+  }
 
-        return this;
-    }
+  deleteTopic(topicId: string) {
+    this.distributor.deleteTopic(topicId);
 
-    deleteTopic(topicId: string) {
-        this.distributor.delete(topicId);
+    return this;
+  }
 
-        return this;
-    }
+  listTopics() {
+    return this.distributor.list();
+  }
 
-    listTopics() {
-        return this.distributor.list();
-    }
+  getTopic(topicId: string) {
+    return this.distributor.getTopic(topicId);
+  }
 
-    getTopic(topicId: string) {
-        return this.distributor.get(topicId);
-    }
+  subscribe(topicId, subscriber) {
+    const topicIds = Array.isArray(topicId) ? topicId : [topicId];
 
-    registerHandler(topicIds: string[], handler: Blabbermouth.Subscriber) {
-        this.distributor.register(topicIds, handler);
-        return this;
-    }
+    topicIds.forEach((id) => {
+      this.distributor.subscribe(id, subscriber);
+    });
+    return this;
+  }
 };
 
 export default Blabbermouth;

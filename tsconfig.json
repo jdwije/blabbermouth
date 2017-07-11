@@ -24,6 +24,7 @@
     ]
   },
   "include": [
+    "benchmark/**/*",
     "src/**/*",
     "__tests__/**/*"
   ]

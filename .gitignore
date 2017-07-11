@@ -62,6 +62,7 @@ tramp
 # cask packages
 .cask/
 dist/
+tmp
 
 # Flycheck
 flycheck_*.el

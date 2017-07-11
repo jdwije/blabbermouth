@@ -1,67 +1,111 @@
+import { eventFactory, Blabbermouth } from './index';
+
 /**
  * Blabbermouth's default in-memory distributor.
  */
 export default class Distributor implements Blabbermouth.IDistributor {
-    private topics = {};
+  private topics = {};
+  private errorMessages = {
+    'topic.duplicate': 'operation resulted in a duplicate topic',
+    'topic.undefined': 'could not find topic by id',
+    'subscriber.init': 'failed to initialise a subscriber',
+  };
 
-    create(topic) {
-        if (this.topics.hasOwnProperty(topic.id))
-            throw Error(`Duplicate topic with id: ${topic}`);
+  private getErrorMessage(id, context: any) {
+    if (!this.errorMessages.hasOwnProperty(id)) {
+      throw new Error(`non-existant error id: ${id}`);
+    }
 
-        this.topics[topic.id] = {
-            topic,
-            subscribers: []
+    return `${this.errorMessages[id]}: ${context.toString()}`;
+  }
+
+  createTopic(topic) {
+    if (this.getTopic(topic.id)) {
+      throw Error(this.getErrorMessage('topic.duplicate', topic.id));
+    }
+
+    this.topics[topic.id] = {
+      topic,
+      subscribers: []
+    };
+
+    return this;
+  }
+
+  deleteTopic(topicId) {
+    if (this.getTopic(topicId)) {
+      delete this.topics[topicId];
+    }
+    return this;
+  }
+
+  getTopic(topicId) {
+    return this.topics.hasOwnProperty(topicId)
+      ? this.topics[topicId].topic : undefined;
+  }
+
+  listTopics() {
+    const list = [];
+    for (const topic in this.topics) {
+      if (this.topics.hasOwnProperty(topic)) {
+        list.push(this.topics[topic].topic);
+      }
+    }
+    return list;
+  }
+
+  subscribe(topicId, subscriber) {
+    if (!this.getTopic(topicId)) {
+      throw new Error(JSON.stringify([
+        this.getErrorMessage('subscriber.init', subscriber),
+        this.getErrorMessage('topic.undefined', topicId)
+      ]));
+    }
+
+    this.topics[topicId].subscribers.push(subscriber);
+
+    return this;
+  }
+
+  publish(topicId, event, subscriber) {
+    if (!this.getTopic(topicId)) {
+      throw new Error(this.getErrorMessage('topic.undefined', topicId));
+    }
+    const bm = new Blabbermouth(this);
+
+    Promise.all(
+      this.topics[topicId]
+        .subscribers
+        .map((sub) => sub(bm, event))
+    ).then((data) => {
+      subscriber && subscriber(bm, eventFactory(topicId, data.map(() => {
+        return {
+          uuid: event.uuid,
+          topicId,
         };
+      })));
+    });
 
-        return this;
+    return this;
+  }
+
+  async request(topicId, event, subscriber?) {
+    if (!this.getTopic(topicId)) {
+      throw new Error(this.getErrorMessage('topic.undefined', topicId));
     }
 
-    delete(topicId) {
-        if (this.topics.hasOwnProperty(topicId)) {
-            this.topics[topicId].subscribers.forEach(sub => sub.kill());
+    const subscribers = this.topics[topicId].subscribers;
+    const bm = new Blabbermouth(this);
+    let data = [];
+    let i = 0;
 
-            delete this.topics[topicId];
-        }
-        return this;
+    while (i < subscribers.length) {
+      data.push(await subscribers[i](bm, event));
+      i++;
     }
 
-    get(topicId) {
-        if (!this.topics.hasOwnProperty(topicId)) return undefined;
-        else return this.topics[topicId].topic;
-    }
+    subscriber && subscriber(bm, eventFactory(topicId, data));
 
-    list() {
-        const list = [];
-
-        for (const topic in this.topics) {
-            if (this.topics.hasOwnProperty(topic)) {
-                list.push(this.topics[topic].topic);
-            }
-        }
-
-        return list;
-    }
-
-    register(topicIds, subscriber) {
-        topicIds.forEach((t) => {
-            if (!this.get(t))
-                throw new Error(
-                    `Tried registering handler with non-existant topic id: ${t}`);
-
-            this.topics[t].subscribers.push(subscriber);
-        });
-
-        return this;
-    }
-
-    async distribute(topicId, event) {
-        if (!this.get(topicId)) {
-            throw new Error(`Non-existant topic with id: ${topicId}`);
-        }
-
-        return Promise.all(
-            this.topics[topicId]
-                .subscribers
-                .map(async s => await s(topicId, event)));
-    }
+    return data;
+  }
 };
