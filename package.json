@@ -26,6 +26,7 @@
     "benchmark": "^2.1.4",
     "chai": "^4.0.2",
     "chalk": "^2.0.1",
+    "docco": "^0.7.0",
     "jest": "~20.0.0",
     "ts-node": "^3.2.0",
     "tslint": "~5.4.3",
@@ -34,8 +35,8 @@
     "typescript": "~2.4.1"
   },
   "scripts": {
-    "clean": "rm -rf coverage dist tmp",
-    "build": "npm run clean && tsc -p tsconfig.release.json",
+    "clean": "rm -rf coverage dist tmp docs",
+    "build": "npm run clean && tsc -p tsconfig.release.json && docco --layout linear src/*.ts",
     "watch": "tsc -w -p tsconfig.release.json",
     "lint": "tslint -t stylish --type-check --project 'tsconfig.json'",
     "test": "npm run test:unit",

@@ -16,7 +16,7 @@ benchmark(
       let i = 0;
       while (i < maxMessages) {
         i++;
-        const content = readFileSync('benchmark/fixture/request.json');
+        const content = readFileSync('benchmark/fixture/request.json').toString();
         content && typeof content === 'string';
       }
     }
@@ -31,6 +31,7 @@ benchmark(
       bm.createTopic(topics.httpRequest)
         .createTopic(topics.httpResponse)
         .createTopic(topics.writeFileRequest)
+        .createTopic(topics.readFileRequest)
         .createTopic(topics.readFileResponse)
         .subscribe(
         topics.writeFileResponse.id,
