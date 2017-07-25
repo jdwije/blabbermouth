@@ -20,6 +20,7 @@
     "tslib": "~1.7.1",
     "uuid": "^3.1.0"
   },
+  "main": "dist/index.js",
   "devDependencies": {
     "@types/jest": "~20.0.2",
     "@types/node": "~6.0.78",
