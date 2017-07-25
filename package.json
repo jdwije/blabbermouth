@@ -46,6 +46,6 @@
     "test:unit": "jest --verbose unit",
     "test:watch": "jest --watch --verbose unit",
     "benchmark": "npm run clean && mkdir tmp && ts-node -c tsconfig.json benchmark/index.benchmark.ts",
-    "install": "npm run build"
+    "postinstall": "npm run build"
   }
 }
