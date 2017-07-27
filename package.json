@@ -45,7 +45,6 @@
     "test:boundry": "jest --verbose boundry",
     "test:unit": "jest --verbose unit",
     "test:watch": "jest --watch --verbose unit",
-    "benchmark": "npm run clean && mkdir tmp && ts-node -c tsconfig.json benchmark/index.benchmark.ts",
-    "postinstall": "npm run build"
+    "benchmark": "npm run clean && mkdir tmp && ts-node -c tsconfig.json benchmark/index.benchmark.ts"
   }
 }
