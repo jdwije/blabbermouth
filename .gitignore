@@ -61,7 +61,7 @@ tramp
 
 # cask packages
 .cask/
-dist/
+
 tmp
 
 # Flycheck
