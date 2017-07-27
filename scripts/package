@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Clean
+rm -rf dist tmp docs
+mkdir dist
+
+# Copy latent files into ./dist
+cp * dist 2>&1 | grep -v 'omitting directory'
+cp .* dist 2>&1 | grep -v 'omitting directory'
+
+# Build typescript
+tsc -p tsconfig.release.json
+
+# Build docs
+docco --layout linear src/*.ts
+
+# Copy latent files from source, recursively
+# cp -rp src/__tests__/schema dist/__tests__/schema
