@@ -1,7 +1,7 @@
 import topics from './../httpTopics';
 import { writeFile } from 'fs';
 
-const writeFileService = async (bm, event) => {
+const writeFileService = async (event, bm) => {
   const t = topics.writeFileResponse.id;
   const path = event.content.path;
   await writeFile(path, JSON.stringify(event.content.content));

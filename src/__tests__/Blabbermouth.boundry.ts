@@ -27,7 +27,7 @@ describe('@jdw/blabbermouth/Blabbermouth::boundry-test', () => {
          */
         const bm = new Blabbermouth();
 
-        const fibService = async (b, event) => {
+        const fibService = async (event, b) => {
             let i;
             let fib = []; // Initialize array!
             const limit = event.content.limit;
@@ -50,7 +50,7 @@ describe('@jdw/blabbermouth/Blabbermouth::boundry-test', () => {
         const aggregator = () => {
             const responses = []
 
-            return async (b, event) => {
+            return async (event, b) => {
                 responses.push(event.content);
                 if (responses.length === maxMessages) {
                     b.publish('http.response', {
@@ -71,7 +71,7 @@ describe('@jdw/blabbermouth/Blabbermouth::boundry-test', () => {
         // here begins the test
         let i = 0;
         const op = (req, res) => {
-            const respond = async (b, event) => {
+            const respond = async (event, b) => {
                 b && res(event.content)
             };
             bm.subscribe('http.response', respond);
@@ -102,7 +102,7 @@ describe('@jdw/blabbermouth/Blabbermouth::boundry-test', () => {
         let i = 0;
         while (i < maxHandlers) {
             let test = false;
-            const response = await bm.subscribe('test.topic', async (b, event) => {
+            const response = await bm.subscribe('test.topic', async (event, b) => {
                 b && expect(event.content).to.deep.eq(fixture);
                 test = true;
                 return responseFixture;

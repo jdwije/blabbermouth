@@ -1,20 +1,20 @@
 /**
  * Builds up a http response.
  */
-const response = (bm, limit) => {
+const response = (limit) => {
   const res = {
     sequenceLimit: limit,
     data: [],
     type: 'http.response',
   };
 
-  return async (topicId, event) => {
+  return async (event, bm) => {
     const data = event.content.data;
 
     res.data.push(data);
 
     if (res.data.length === limit) {
-      topicId && await bm.publish('http.response', res);
+      await bm.publish('http.response', res);
     }
 
     return data;

@@ -1,7 +1,7 @@
 import topics from './../httpTopics';
 import { readFile } from 'fs';
 
-const readFileService = async (bm, event) => {
+const readFileService = (event, bm) => {
   const t = topics.readFileResponse.id;
   const path = event.content.path;
   readFile(path, (err, data) => {

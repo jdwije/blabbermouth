@@ -4,8 +4,7 @@ import topics from './lib/httpTopics';
 import * as services from './lib/services';
 import { readFileSync } from 'fs';
 
-const maxMessages = process.env.MAX_MESSAGES || 5;
-
+const maxMessages = process.env.MAX_MESSAGES || 500;
 
 benchmark(
   'benchmark: @jdw/blabbermouth/Blabbermouth',
@@ -37,8 +36,8 @@ benchmark(
         topics.writeFileResponse.id,
         services.readFile
         )
-        .subscribe(topics.readFileResponse.id, async (b, event) => {
-          b && callback(event.content);
+        .subscribe(topics.readFileResponse.id, (event) => {
+          callback(event.content);
           return event.content;
         });
       let i = 0;
