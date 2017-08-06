@@ -1,6 +1,6 @@
 {
   "name": "@jdw/blabbermouth",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Lightweight, asynchronous message passing for NodeJS.",
   "engineStrict": true,
   "engines": {
