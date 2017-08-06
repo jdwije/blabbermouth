@@ -1,8 +1,6 @@
 language: node_js
 node_js:
-  - "4.3.2"
-  - "5"
-  - "6.9"
+  - "6.10.2"
   - "7"
 
 install:
@@ -10,7 +8,6 @@ install:
   - yarn build
 
 script:
-  - echo "node $(node -v)"
   - yarn test
   - yarn test:boundry
   - yarn benchmark
