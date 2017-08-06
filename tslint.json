@@ -2,24 +2,39 @@
  * This starter project recommended using Microsoft TSLint rules.
  * Please see https://github.com/Microsoft/tslint-microsoft-contrib for more details.
  */
-
 {
   "extends": [
     "tslint-microsoft-contrib"
   ],
   "rules": {
+    "no-increment-decrement": false,
+    "no-unsafe-any": false,
+    "no-default-export": false,
     "mocha-no-side-effect-code": false,
     "missing-jsdoc": false,
     "no-relative-imports": false,
     "export-name": false,
     "promise-function-async": false,
     "no-void-expression": false,
-    "typedef": [
-      true,
-      "parameter",
-      "arrow-parameter",
-      "property-declaration",
-      "member-variable-declaration"
-    ]
+    "max-func-body-length": false,
+    "possible-timing-attack": false,
+    "no-reserved-keywords": false,
+    "cyclomatic-complexity": [
+      25
+    ],
+    "quotemark": [
+      "single"
+    ],
+    "no-backbone-get-set-outside-model": false,
+    "chai-vague-errors": false,
+    "no-any": false,
+    "no-eval": false,
+    "no-var-requires": false,
+    "no-require-imports": false,
+    "no-http-string": false,
+    "typedef": false,
+    "no-unused-expression": {
+      "severity": "warning"
+    }
   }
 }

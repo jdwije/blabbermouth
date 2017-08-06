@@ -1,15 +1,17 @@
+import { has } from 'lodash';
 import benchmark from './lib/benchmark';
+import fibonacci from './lib/fibonacci';
+import httpTopics from './lib/httpTopics';
 import { Blabbermouth } from './../src/index';
-import fib from './lib/fibonacci';
-import topics from './lib/httpTopics';
 import * as services from './lib/services';
 
 // const maxHandlers = process.env.MAX_HANDLERS | 100;
-const maxMessages = process.env.MAX_MESSAGES | 1000;
-const maxFibLimit = process.env.FIB_MAX_LIMIT | 100;
+const maxMessages = has(process.env, 'MAX_MESSAGES')
+  ? process.env.MAX_MESSAGES : 1000;
+const maxFibLimit = has(process.env, 'FIB_MAX_LIMIT')
+  ? process.env.FIB_MAX_LIMIT : 100;
 
 const cb = (r) => {
-  //  console.log(`response.data.length::${r.data.length}`);
   return r;
 };
 
@@ -17,19 +19,19 @@ benchmark(
   'benchmark: @jdw/blabbermouth/Blabbermouth',
   'Testing the performance of non io bound Fibonacci generation',
   [{
-    id: `@native/synchronous::`,
+    id: '@native/synchronous::',
     exec: () => {
       let i = 0;
-      let data = [];
+      const data = [];
       while (i < maxMessages) {
         i++;
-        data.push(fib(maxFibLimit));
+        data.push(fibonacci(maxFibLimit));
       }
 
       cb({
         maxMessages,
         maxFibLimit,
-        data,
+        data
       });
     }
   }, {
@@ -40,26 +42,27 @@ benchmark(
         return r;
       };
 
-      bm.createTopic(topics.httpRequest)
-        .createTopic(topics.httpResponse)
-        .createTopic(topics.fibonacciRequest)
-        .createTopic(topics.fibonacciResponse)
-        .subscribe(topics.httpRequest.id, services.fibonacci)
+      bm.createTopic(httpTopics.httpRequest)
+        .createTopic(httpTopics.httpResponse)
+        .createTopic(httpTopics.fibonacciRequest)
+        .createTopic(httpTopics.fibonacciResponse)
+        .subscribe(httpTopics.httpRequest.id, services.fibonacci)
         .subscribe(
-        topics.fibonacciResponse.id,
+        httpTopics.fibonacciResponse.id,
         services.response(maxMessages)
         )
-        .subscribe(topics.httpResponse.id, async (event) => {
+        .subscribe(httpTopics.httpResponse.id, async (event) => {
           callback(event.content);
+
           return event.content;
         });
       let i = 0;
       while (i < maxMessages) {
         i++;
-        bm.publish(topics.httpRequest.id, {
-          sequenceLimit: maxFibLimit,
+        bm.publish(httpTopics.httpRequest.id, {
+          sequenceLimit: maxFibLimit
         });
       }
-    },
+    }
   }]
 );

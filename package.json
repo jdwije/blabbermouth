@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jdwije/blabbermouth#README.md",
   "dependencies": {
+    "lodash": "^4.17.4",
     "tslib": "~1.7.1",
     "uuid": "^3.1.0"
   },
