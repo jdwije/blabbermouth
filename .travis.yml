@@ -23,6 +23,6 @@ jobs:
         provider: npm
         email: "admin@jwije.com"
         api_key: $NPM_TOKEN
-      on:
-        tags: true
+        on:
+          tags: true
 
