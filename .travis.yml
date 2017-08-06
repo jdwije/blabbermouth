@@ -16,7 +16,7 @@ jobs:
   include:
     - stage: release
       node_js: "6.10.2"
-      script:
+      before_deploy:
         - yarn
         - yarn build
       deploy:
