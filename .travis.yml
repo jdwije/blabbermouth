@@ -16,6 +16,9 @@ jobs:
   include:
     - stage: release
       node_js: "6.10.2"
+      script:
+        - yarn
+        - yarn build
       deploy:
         provider: npm
         email: "admin@jwije.com"
