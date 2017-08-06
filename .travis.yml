@@ -1,19 +1,18 @@
 language: node_js
 
-node_js: ['6', '7']
-
-install:
-- yarn
-- yarn build
-
-script:
-- yarn test
-- yarn test:boundry
-- yarn benchmark
-
-
 jobs:
   include:
+    - stage: build
+      node_js: ['6', '7']
+      install:
+        - yarn
+        - yarn build
+    - stage: validate
+      node_js: ['6', '7']
+      script:
+        - yarn test
+        - yarn test:boundry
+        - yarn benchmark
     - stage: release
       node_js: "6.10.2"
       before_deploy:
