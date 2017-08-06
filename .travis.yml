@@ -7,7 +7,9 @@ install:
 jobs:
   include:
     - stage: validate
-      node_js: ['6', '7']
+      node_js:
+        - "6"
+        - "7"
       script:
         - yarn test
         - yarn test:boundry
