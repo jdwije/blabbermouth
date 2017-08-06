@@ -12,10 +12,15 @@ script:
   - yarn test:boundry
   - yarn benchmark
 
-deploy:
-  provider: npm
-  email: "admin@jwije.com"
-  api_key: "$NPM_TOKEN"
-  on:
-    tags: true  
+jobs:
+  include:
+    - stage: npm release
+      node_js: "6.10.2"
+      script: echo "Deploying to npm ..."
+      deploy:
+        provider: npm
+        email: "admin@jwije.com"
+        api_key: $NPM_TOKEN
+        on:
+          tags: true
 
