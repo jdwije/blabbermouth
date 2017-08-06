@@ -7,18 +7,21 @@ install:
 - yarn build
 
 script:
-- yarn lint
-- yarn build
 - yarn test
-- yarn test:bench
+- yarn test:boundry
+- yarn benchmark
 
-before_deploy:
-- echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > ~/.npmrc
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script:
-    - npm publish
-  on:
-    tags: true
+jobs:
+  include:
+    - stage: release
+      node_js: "6.10.2"
+      before_deploy:
+        - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > ~/.npmrc
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script:
+          - npm publish
+        on:
+          tags: true
