@@ -1,28 +1,24 @@
 language: node_js
-node_js:
-  - "6.10.2"
-  - "7"
+
+node_js: ['6', '7']
 
 install:
-  - yarn
-  - yarn build
+- yarn
+- yarn build
 
 script:
-  - yarn test
-  - yarn test:boundry
-  - yarn benchmark
+- yarn lint
+- yarn build
+- yarn test
+- yarn test:bench
 
-jobs:
-  include:
-    - stage: release
-      node_js: "6.10.2"
-      before_deploy:
-        - yarn
-        - yarn build
-      deploy:
-        provider: npm
-        email: "admin@jwije.com"
-        api_key: $NPM_TOKEN
-        on:
-          tags: true
+before_deploy:
+- echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > ~/.npmrc
 
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+    - npm publish
+  on:
+    tags: true
