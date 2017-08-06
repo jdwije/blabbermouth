@@ -10,7 +10,7 @@ install:
   - yarn build
 
 script:
-  - echo "run-time: $(node -v) ..."
+  - echo "node $(node -v)"
   - yarn test
   - yarn test:boundry
   - yarn benchmark
