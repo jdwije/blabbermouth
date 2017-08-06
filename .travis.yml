@@ -1,12 +1,11 @@
 language: node_js
 
+install:
+  - yarn
+  - yarn build
+
 jobs:
   include:
-    - stage: build
-      node_js: ['6', '7']
-      install:
-        - yarn
-        - yarn build
     - stage: validate
       node_js: ['6', '7']
       script:
