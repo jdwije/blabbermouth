@@ -5,7 +5,15 @@ node_js:
   - "6.9"
   - "7"
 
-script: echo "Running tests against $(node -v) ..."
+install:
+  - yarn
+  - yarn build
+
+script:
+  - echo "run-time: $(node -v) ..."
+  - yarn test
+  - yarn test:boundry
+  - yarn benchmark
 
 deploy:
   provider: npm
